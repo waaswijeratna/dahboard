@@ -1,7 +1,9 @@
+import OverviewSection from '@/components/overview/overviewSection'
 
-export default function overview () {
+
+export default function Overview () {
   return (
-    <div>overview</div>
+    <OverviewSection />
   )
 }
 

@@ -16,6 +16,7 @@ export default function MyNavs() {
   // Nav items
   const navItems = [
     { name: "Overview", icon: <FaPhotoVideo className="text-xl" />, path: "" },
+    { name: "Posts", icon: <FaPhotoVideo className="text-xl" />, path: "posts" },
     { name: "Exhibitions", icon: <FaPhotoVideo className="text-xl" />, path: "exhibitions" },
     { name: "Fundraising", icon: <FaDonate className="text-xl" />, path: "fundraising" },
     { name: "Advertisements", icon: <FaImages className="text-xl" />, path: "advertisements" },
