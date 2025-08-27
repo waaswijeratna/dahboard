@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+@layer utilities {
+    .scrollbar-hide {
+      -ms-overflow-style: none; /* IE and Edge */
+      scrollbar-width: none; /* Firefox */
+    }
+    .scrollbar-hide::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, Opera */
+    }
+  }
+
+@theme{
+    --color-primary:#0E4659;
+    --color-secondary:#31B2C1;
+    --color-third:#0CFFEA;
+    --color-fourth:#09202C;
+}
+
+body{
+    background-color: #f2f2f2;
+}
