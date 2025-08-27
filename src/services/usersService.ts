@@ -1,5 +1,12 @@
 // services/userService.ts
 
+type FilterState = {
+  search: string;
+  sortBy: "time" | "name" | null;
+  order: "asc" | "desc" | null;
+  sortUser: string;
+};
+
 // Get user profile by ID
 export const getUserProfile = async (userId: string) => {
   try {
@@ -22,10 +29,30 @@ export const getUserProfile = async (userId: string) => {
   }
 };
 
-// Get all users
-export const getAllUsers = async () => {
+// Get all users with filters
+export const getAllUsers = async (filters?: FilterState) => {
   try {
-    const response = await fetch(`http://localhost:5000/users`, {
+    // Build query parameters based on filters
+    const queryParams = new URLSearchParams();
+    
+    if (filters) {
+      if (filters.search) {
+        queryParams.append('search', filters.search);
+      }
+      if (filters.sortBy) {
+        queryParams.append('sortBy', filters.sortBy);
+      }
+      if (filters.order) {
+        queryParams.append('order', filters.order);
+      }
+      if (filters.sortUser) {
+        queryParams.append('sortUser', filters.sortUser);
+      }
+    }
+
+    const url = `http://localhost:5000/users${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
+    
+    const response = await fetch(url, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

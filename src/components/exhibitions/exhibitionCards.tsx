@@ -8,6 +8,7 @@ import UserProfileCard from "@/components/UserProfileCard";
 import { FaTrash } from "react-icons/fa";
 import Snackbar from "../SnackBar";
 import ConfirmationDialog from "../ConfirmationDialog";
+import { useSearchFilters } from "../SearchFilterContext";
 
 interface ExhibitionCardData {
     _id: string;
@@ -23,6 +24,7 @@ interface ExhibitionCardData {
 
 export default function ExhibitionCards() {
     const router = useRouter();
+    const { filters } = useSearchFilters();
     const [exhibitions, setExhibitions] = useState<ExhibitionCardData[]>([]);
     const [loading, setLoading] = useState(true);
     const [snackbar, setSnackbar] = useState({
@@ -38,7 +40,8 @@ export default function ExhibitionCards() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const data = await getAllExhibitions();
+                setLoading(true);
+                const data = await getAllExhibitions(filters);
                 setExhibitions(data);
                 console.log(data);
             } catch (error) {
@@ -49,7 +52,7 @@ export default function ExhibitionCards() {
         };
 
         fetchData();
-    }, []);
+    }, [filters]);
 
     const handleCardClick = (id: string) => {
         router.push(`/exhibitionsGallery?id=${id}`);

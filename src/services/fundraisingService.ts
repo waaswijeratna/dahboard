@@ -54,9 +54,21 @@ export const getUserCampaigns = async () => {
 };
 
 // Get all campaigns (publicly visible)
-export const getAllCampaigns = async () => {
+export const getAllCampaigns = async (filters?: {
+  search?: string;
+  sortBy?: "time" | "name" | null;
+  order?: "asc" | "desc" | null;
+  sortUser?: string;
+}) => {
   try {
-    const response = await fetch("http://localhost:5000/campaigns"); 
+    const query = new URLSearchParams();
+
+    if (filters?.search) query.append("search", filters.search);
+    if (filters?.sortBy) query.append("sortBy", filters.sortBy);
+    if (filters?.order) query.append("order", filters.order);
+    if (filters?.sortUser) query.append("sortUser", filters.sortUser);
+    
+    const response = await fetch(`${API_URL}?${query.toString()}`); 
 
     if (!response.ok) throw new Error("Failed to fetch campaigns");
 

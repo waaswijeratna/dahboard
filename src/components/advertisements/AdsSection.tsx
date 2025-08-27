@@ -1,21 +1,58 @@
 import React, { useEffect, useState } from "react";
 import AdCard from "./AdCard";
-import { getAllAds } from "@/services/advertisementsService"; // Assuming this function fetches all ads
+import { getAllAds } from "@/services/advertisementsService";
 import { Advertisements } from "@/types";
+import { useSearchFilters } from "../SearchFilterContext";
 
 export default function AdsSection() {
   const [ads, setAds] = useState<Advertisements[]>([]);
+  const { filters } = useSearchFilters();
+  const [loading, setLoading] = useState(true);
+
+  const fetchAds = async () => {
+    setLoading(true);
+    try {
+      // Only pass filters that have values to avoid sending empty parameters
+      const activeFilters = {
+        ...(filters.search && { search: filters.search }),
+        ...(filters.sortBy && { sortBy: filters.sortBy }),
+        ...(filters.order && { order: filters.order }),
+        ...(filters.sortUser && { sortUser: filters.sortUser }),
+      };
+      
+      const allAds = await getAllAds(activeFilters);
+      setAds(allAds || []);
+    } catch (error) {
+      console.error("Error fetching ads:", error);
+      setAds([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     fetchAds();
-  }, []);
+  }, [filters]); // Refetch when filters change
 
-  const fetchAds = async () => {
-    const allAds = await getAllAds(); // Fetching all ads
-    if (allAds) {
-      setAds(allAds);
-    }
-  };
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-[60vh]">
+        <p className="text-lg font-semibold text-third">
+          Loading advertisements...
+        </p>
+      </div>
+    );
+  }
+
+  if (ads.length === 0) {
+    return (
+      <div className="flex justify-center items-center h-[60vh]">
+        <p className="text-lg font-semibold text-third">
+          No advertisements available right now.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="h-full w-full overflow-auto scrollbar-hide">

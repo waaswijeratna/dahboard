@@ -7,6 +7,7 @@ import CreateModeratorModal from "./CreateModeratorModal";
 import Snackbar from "../SnackBar";
 import ConfirmationDialog from "../ConfirmationDialog";
 import { getAllModerators, deleteModerator } from "@/services/authService";
+import { useSearchFilters } from "../SearchFilterContext";
 
 interface Moderator {
   _id: string;
@@ -32,9 +33,14 @@ export default function ModeratorsParent() {
     moderatorId: ""
   });
 
+  // Get filters from context
+  const { filters } = useSearchFilters();
+
   const fetchModerators = async () => {
     try {
-      const data = await getAllModerators();
+      // Pass filters to the API call
+      const data = await getAllModerators(filters);
+      
       // Get current user's email from localStorage to filter them out
       const userData = localStorage.getItem("userData");
       if (userData) {
@@ -64,7 +70,14 @@ export default function ModeratorsParent() {
     }
 
     fetchModerators();
-  }, []);
+  }, []); // Initial load
+
+  // Re-fetch moderators when filters change
+  useEffect(() => {
+    if (!loading) { // Only refetch if initial load is complete
+      fetchModerators();
+    }
+  }, [filters]); // Dependency on filters from context
 
   const handleDelete = async (id: string) => {
     if (!id) {

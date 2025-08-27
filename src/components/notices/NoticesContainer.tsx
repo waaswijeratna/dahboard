@@ -1,11 +1,14 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { getNotices, deleteNotice, updateNotice, Notice } from "../../services/noticesService";
 import NoticeCard from "./NoticeCard";
 import Snackbar from "../SnackBar";
+import { useSearchFilters } from "../SearchFilterContext";
 
 const NoticesContainer: React.FC = () => {
   const [notices, setNotices] = useState<Notice[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const { filters } = useSearchFilters();
   const [snackbar, setSnackbar] = useState({
     show: false,
     message: '',
@@ -14,16 +17,29 @@ const NoticesContainer: React.FC = () => {
 
   const fetchNotices = async () => {
     setLoading(true);
-    const data = await getNotices();
-    if (data) {
-      setNotices(data);
+    try {
+      const activeFilters = {
+        ...(filters.search && { search: filters.search }),
+        ...(filters.sortBy && { sortBy: filters.sortBy }),
+        ...(filters.order && { order: filters.order }),
+        ...(filters.sortUser && { sortUser: filters.sortUser }),
+      };
+      
+      const data = await getNotices(activeFilters);
+      if (data) {
+        setNotices(data);
+      }
+    } catch (error) {
+      console.error("Error fetching notices:", error);
+      setNotices([]);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   useEffect(() => {
     fetchNotices();
-  }, []);
+  }, [filters]); 
 
   const handleAccept = async (id: string) => {
     try {

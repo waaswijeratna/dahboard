@@ -7,6 +7,7 @@ import { FaTrash } from 'react-icons/fa';
 import { getUserPosts, deletePost } from '@/services/postsService';
 import ConfirmationDialog from '../ConfirmationDialog';
 import Snackbar from '../SnackBar';
+import { useSearchFilters } from '../SearchFilterContext';
 
 interface Post {
     userId: string;
@@ -33,9 +34,13 @@ export default function PostsTable() {
         type: 'success' as 'success' | 'error'
     });
 
+    // Get filters from context
+    const { filters } = useSearchFilters();
+
     const fetchPosts = async () => {
         try {
-            const data = await getUserPosts();
+            // Pass filters to the API call
+            const data = await getUserPosts(filters);
             if (data) {
                 setPosts(data);
             }
@@ -58,7 +63,14 @@ export default function PostsTable() {
         }
 
         fetchPosts();
-    }, []);
+    }, []); // Initial load
+
+    // Re-fetch posts when filters change
+    useEffect(() => {
+        if (!loading) { // Only refetch if initial load is complete
+            fetchPosts();
+        }
+    }, [filters]); // Dependency on filters from context
 
     const handleDelete = async (id: string) => {
         if (!id) {

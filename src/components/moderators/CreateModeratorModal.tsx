@@ -54,6 +54,7 @@ export default function CreateModeratorModal({ onClose }: Props) {
         formData.email,
         Number(formData.age),
         formData.password,
+        formData.role,
         formData.pfpUrl
       );
 

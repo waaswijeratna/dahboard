@@ -64,9 +64,24 @@ export const getUserAds = async () => {
   }
 };
 
-export const getAllAds = async () => {
+// Updated getAllAds to support filters
+export const getAllAds = async (filters?: {
+  search?: string;
+  sortBy?: "time" | "name" | null;
+  order?: "asc" | "desc" | null;
+  sortUser?: string;
+}) => {
   try {
-    const response = await fetch(`${API_URL}`, {
+    const query = new URLSearchParams();
+
+    // Only add parameters that have truthy values
+    if (filters?.search?.trim()) query.append("search", filters.search.trim());
+    if (filters?.sortBy) query.append("sortBy", filters.sortBy);
+    if (filters?.order) query.append("order", filters.order);
+    if (filters?.sortUser?.trim()) query.append("sortUser", filters.sortUser.trim());
+    
+    const url = query.toString() ? `${API_URL}?${query.toString()}` : API_URL;
+    const response = await fetch(url, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
