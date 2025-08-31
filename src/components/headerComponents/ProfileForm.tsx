@@ -11,12 +11,12 @@ interface ProfileData {
   email: string;
   age: number;
   pfpUrl: string;
+  role: string;
 }
 
 interface Props {
   initialData: ProfileData;
   onSwitch: () => void;
-
 }
 
 export default function ProfileForm({ initialData }: Props) {
@@ -30,7 +30,7 @@ export default function ProfileForm({ initialData }: Props) {
   const [serverError, setServerError] = useState("");
 
   const validateEmail = (email: string) => {
-    return /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email);
+    return /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email);
   };
 
   const handleSignOut = () => {
@@ -64,7 +64,8 @@ export default function ProfileForm({ initialData }: Props) {
         name,
         email,
         age: Number(age),
-        pfpUrl
+        pfpUrl,
+        role: initialData.role, // ✅ fixed role bug
       };
 
       const response = await updateUser(updatedData);
@@ -79,12 +80,12 @@ export default function ProfileForm({ initialData }: Props) {
   };
 
   return (
-    <div className="w-full h-[80vh] overflow-auto scrollbar-hide mt-2 ">
+    <div className="w-full h-[80vh] overflow-auto scrollbar-hide mt-2 text-black">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl text-third font-bold">Profile</h2>
+        <h2 className="text-2xl text-gray-800 font-bold">Profile</h2>
         <button
           onClick={handleSignOut}
-          className="cursor-pointer text-third hover:text-white flex items-center gap-2"
+          className="cursor-pointer text-red-500 hover:text-red-700 flex items-center gap-2"
           title="Sign Out"
         >
           <svg
@@ -104,18 +105,19 @@ export default function ProfileForm({ initialData }: Props) {
         </button>
       </div>
 
-      {serverError && <p className="text-red-500 mb-4">{serverError}</p>}
+      {serverError && <p className="text-red-600 mb-4">{serverError}</p>}
 
       {isEditing ? (
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-gray-400 mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               Name
             </label>
             <input
               type="text"
-              className={`w-full bg-gray-800 text-white p-3 rounded-lg border ${errors.name ? "border-red-500" : "border-gray-700"
-                } focus:border-third focus:outline-none`}
+              className={`w-full bg-white text-gray-800 p-3 rounded-lg border ${
+                errors.name ? "border-red-500" : "border-gray-300"
+              } focus:border-third focus:outline-none`}
               value={name}
               onChange={(e) => {
                 setName(e.target.value);
@@ -128,13 +130,14 @@ export default function ProfileForm({ initialData }: Props) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-400 mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               Email
             </label>
             <input
               type="email"
-              className={`w-full bg-gray-800 text-white p-3 rounded-lg border ${errors.email ? "border-red-500" : "border-gray-700"
-                } focus:border-third focus:outline-none`}
+              className={`w-full bg-white text-gray-800 p-3 rounded-lg border ${
+                errors.email ? "border-red-500" : "border-gray-300"
+              } focus:border-third focus:outline-none`}
               value={email}
               onChange={(e) => {
                 setEmail(e.target.value);
@@ -147,7 +150,7 @@ export default function ProfileForm({ initialData }: Props) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-400 mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               Profile Picture
             </label>
             <ImageUploader
@@ -158,13 +161,13 @@ export default function ProfileForm({ initialData }: Props) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-400 mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               Age
             </label>
             <input
               type="number"
               min="1"
-              className="w-full bg-gray-800 text-white p-3 rounded-lg border border-gray-700 focus:border-third focus:outline-none"
+              className="w-full bg-white text-gray-800 p-3 rounded-lg border border-gray-300 focus:border-third focus:outline-none"
               value={age}
               onChange={(e) => setAge(e.target.value)}
             />
@@ -173,56 +176,58 @@ export default function ProfileForm({ initialData }: Props) {
           <div className="flex gap-4">
             <button
               type="submit"
-              className="cursor-pointer flex-1 bg-secondary hover:bg-third duration-300 text-fourth p-3 rounded-lg"
+              className="cursor-pointer flex-1 bg-secondary hover:bg-third duration-300 text-white p-3 rounded-lg"
             >
               Update Profile
             </button>
             <button
               type="button"
               onClick={() => setIsEditing(false)}
-              className="cursor-pointer flex-1 bg-gray-500 hover:bg-gray-400 duration-300 text-fourth p-3 rounded-lg"
+              className="cursor-pointer flex-1 bg-gray-400 hover:bg-gray-500 duration-300 text-white p-3 rounded-lg"
             >
               Cancel
             </button>
           </div>
         </form>
       ) : (
-        <div className="space-y-6 flex flex-col jusify-between">
-
+        <div className="space-y-6 flex flex-col justify-between">
           <div className="flex items-center">
             <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 Profile Picture
               </label>
-              <img src={pfpUrl} alt="Profile" className="w-32 h-32 rounded-full object-cover border-2 border-third" />
+              <img
+                src={pfpUrl}
+                alt="Profile"
+                className="w-32 h-32 rounded-full object-cover border-2 border-third"
+              />
             </div>
 
             <div className="ml-6">
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-2">
-                  Name - <span className="text-white text-lg">{name}</span>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Name - <span className="text-gray-900 text-lg">{name}</span>
                 </label>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-2">
-                  Age - <span className="text-white text-lg">{age}</span>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Age - <span className="text-gray-900 text-lg">{age}</span>
                 </label>
               </div>
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-400 mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               Email
             </label>
-            <p className="text-white text-lg">{email}</p>
+            <p className="text-gray-900 text-lg">{email}</p>
           </div>
-
 
           <button
             onClick={() => setIsEditing(true)}
-            className="cursor-pointer w-full bg-secondary mt-10 hover:bg-third duration-300 text-fourth p-3 rounded-lg"
+            className="cursor-pointer w-full bg-secondary mt-10 hover:bg-third duration-300 text-white p-3 rounded-lg"
           >
             Edit Profile
           </button>

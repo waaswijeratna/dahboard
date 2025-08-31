@@ -10,7 +10,7 @@ export default function MyNavs() {
 
   // Navigation function
   const handleNavigation = (path: string) => {
-    router.push(`/${path}`);
+    router.push(path === "" ? "/" : `/${path}`);
   };
 
   // Nav items
@@ -25,6 +25,14 @@ export default function MyNavs() {
     { name: "Moderators", icon: <FaPhotoVideo className="text-xl" />, path: "moderators" },
   ];
 
+  // Active check helper
+  const isActive = (path: string) => {
+    if (path === "") {
+      return pathname === "/";
+    }
+    return pathname.startsWith(`/${path}`);
+  };
+
   return (
     <div className="w-full h-[100vh] p-4">
       <div className="h-[10%]">
@@ -33,13 +41,14 @@ export default function MyNavs() {
           <h3 className="font-semibold text-lg">Arthaze</h3>
         </div>
       </div>
+
       {/* Navigation List */}
       <ul className="flex flex-col justify-center items-baseline space-y-8 w-full h-[90%]">
         {navItems.map(({ name, icon, path }) => (
           <li
             key={path}
             className={`flex items-center space-x-3 cursor-pointer duration-300 
-              ${pathname.includes(path) ? "text-primary font-bold" : "text-fourth hover:text-primary"}`}
+              ${isActive(path) ? "text-primary font-bold" : "text-fourth hover:text-primary"}`}
             onClick={() => handleNavigation(path)}
           >
             {icon}

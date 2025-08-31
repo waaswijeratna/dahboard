@@ -16,11 +16,26 @@ type Props = {
   };
 };
 
-const CampaignCard: React.FC<Props> = ({ campaign }) => {
+
+import { FaTrash } from "react-icons/fa";
+
+const CampaignCard: React.FC<Props & { userRole?: string; onDelete?: (id: string) => void }> = ({ campaign, userRole, onDelete }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <>
+    <div className="relative w-full">
+      {/* Delete Icon for super moderators */}
+      {userRole === "super" && (
+        <button
+          className="absolute top-2 right-2 z-10 text-red-500 hover:text-red-700 bg-white rounded-full p-2 shadow"
+          onClick={e => {
+            e.stopPropagation();
+            if (onDelete) onDelete(campaign._id);
+          }}
+        >
+          <FaTrash />
+        </button>
+      )}
       {/* Card */}
       <div
         className="p-4 w-full h-full rounded-lg shadow-md bg-white text-black cursor-pointer hover:shadow-lg transition"
@@ -46,10 +61,10 @@ const CampaignCard: React.FC<Props> = ({ campaign }) => {
       {/* Modal */}
       {isOpen && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-          <div className="bg-primary text-white rounded-lg shadow-xl max-w-lg w-full p-6 relative">
+          <div className="bg-white text-black rounded-lg shadow-xl max-w-lg w-full p-6 relative">
             <button
               onClick={() => setIsOpen(false)}
-              className="absolute top-2 right-3 text-gray-400 hover:text-white text-lg cursor-pointer"
+              className="absolute top-2 right-3 text-gray-400 hover:text-gray-700 text-lg cursor-pointer"
             >
               ✕
             </button>
@@ -61,7 +76,7 @@ const CampaignCard: React.FC<Props> = ({ campaign }) => {
               />
             </div>
             <h2 className="text-2xl font-bold mb-2">{campaign.title}</h2>
-            <p className="text-gray-300 mb-4 text-sm leading-relaxed">
+            <p className="text-gray-700 mb-4 text-sm leading-relaxed">
               {campaign.reason}
             </p>
             <div className="text-lg font-medium">
@@ -71,7 +86,7 @@ const CampaignCard: React.FC<Props> = ({ campaign }) => {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

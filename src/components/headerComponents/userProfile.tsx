@@ -26,7 +26,7 @@ export default function UserProfile() {
             {/* Overlay Modal */}
             {isEditing && (
                 <div className="fixed top-0 left-0 w-full h-full bg-black/30 backdrop-blur flex justify-center items-center z-50">
-                    <div className="bg-primary w-[50vw] p-6 rounded-lg w-96 relative">
+                    <div className="bg-white text-black w-[50vw] p-6 rounded-lg w-96 relative">
                         <button 
                             onClick={() => setIsEditing(false)} 
                             className="cursor-pointer absolute top-0 right-2 text-black hover:text-third duration-300 text-2xl"

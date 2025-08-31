@@ -8,13 +8,15 @@ import { getUserPosts, deletePost } from '@/services/postsService';
 import ConfirmationDialog from '../ConfirmationDialog';
 import Snackbar from '../SnackBar';
 import { useSearchFilters } from '../SearchFilterContext';
+import UserProfileCard from '../UserProfileCard';
+import PostDetailsModal from './PostDetailsModal';
 
 interface Post {
     userId: string;
     name: string;
     description: string;
     imageUrl: string;
-    reactions: any[];
+    likes: any[];
     createdAt: string;
     updatedAt: string;
     id: string;
@@ -33,6 +35,7 @@ export default function PostsTable() {
         message: '',
         type: 'success' as 'success' | 'error'
     });
+    const [selectedPost, setSelectedPost] = useState<Post | null>(null);
 
     // Get filters from context
     const { filters } = useSearchFilters();
@@ -113,6 +116,7 @@ export default function PostsTable() {
                 <thead className="bg-gray-100 h-[10%]">
                     <tr>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Image</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created Date</th>
@@ -124,13 +128,20 @@ export default function PostsTable() {
                 </thead>
                 <tbody className="bg-white h-[90%] divide-y divide-gray-200 overflow-y-auto scrollbar-hide">
                     {posts.map((post) => (
-                        <tr key={post.id} className="hover:bg-gray-50">
+                        <tr 
+                            key={post.id} 
+                            className="hover:bg-gray-50 cursor-pointer"
+                            onClick={() => setSelectedPost(post)}
+                        >
                             <td className="px-6 py-4 whitespace-nowrap">
                                 <img
                                     src={post.imageUrl}
                                     alt={post.name}
                                     className="w-16 h-16 rounded-lg object-cover"
                                 />
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                                <UserProfileCard userId={post.userId} />
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                                 <div className="text-sm font-medium text-gray-900">{post.name}</div>
@@ -179,6 +190,13 @@ export default function PostsTable() {
                 message={snackbar.message}
                 type={snackbar.type}
                 onClose={() => setSnackbar(prev => ({ ...prev, show: false }))}
+            />
+
+            {/* Post Details Modal */}
+            <PostDetailsModal
+                isOpen={selectedPost !== null}
+                onClose={() => setSelectedPost(null)}
+                post={selectedPost}
             />
         </div>
     );

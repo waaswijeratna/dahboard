@@ -96,78 +96,78 @@ const OverviewSection: React.FC = () => {
 
   return (
     <div className="h-[81vh] overflow-y-auto scrollbar-hide">
-      <div className="max-w-7xl mx-auto space-y-8">
+      <div className="max-w-7xl mx-auto space-y-4">
 
         {/* Key Metrics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Posts Card */}
-          <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-            <div className="flex items-center justify-between mb-4">
-              <div className="p-3 bg-blue-100 rounded-xl">
-                <FileText className="h-6 w-6 text-blue-600" />
+          <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-4 shadow hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+            <div className="flex items-center justify-between mb-2">
+              <div className="p-2 bg-blue-100 rounded-lg">
+                <FileText className="h-4 w-4 text-blue-600" />
               </div>
-              <span className="text-xs font-medium text-green-600 bg-green-100 px-2 py-1 rounded-full">
+              <span className="text-xs font-medium text-green-600 bg-green-100 px-2 py-0.5 rounded-full">
                 {stats.posts.timeDistribution.daily > 0 ? `+${stats.posts.timeDistribution.daily} today` : 'No posts today'}
               </span>
             </div>
-            <h3 className="text-2xl font-bold text-gray-800 mb-1">{stats.posts.total.toLocaleString()}</h3>
-            <p className="text-gray-600 text-sm">Total Posts</p>
+            <h3 className="text-lg font-bold text-gray-800 mb-0.5">{stats.posts.total.toLocaleString()}</h3>
+            <p className="text-gray-600 text-xs">Total Posts</p>
           </div>
 
           {/* Exhibitions Card */}
-          <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-            <div className="flex items-center justify-between mb-4">
-              <div className="p-3 bg-purple-100 rounded-xl">
-                <Eye className="h-6 w-6 text-purple-600" />
+          <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-4 shadow hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+            <div className="flex items-center justify-between mb-2">
+              <div className="p-2 bg-purple-100 rounded-lg">
+                <Eye className="h-4 w-4 text-purple-600" />
               </div>
-              <span className="text-xs font-medium text-orange-600 bg-orange-100 px-2 py-1 rounded-full">
+              <span className="text-xs font-medium text-orange-600 bg-orange-100 px-2 py-0.5 rounded-full">
                 {stats.exhibitions.todayCount > 0 ? `${stats.exhibitions.todayCount} today` : 'None today'}
               </span>
             </div>
-            <h3 className="text-2xl font-bold text-gray-800 mb-1">{stats.exhibitions.total}</h3>
-            <p className="text-gray-600 text-sm">Total Exhibitions</p>
+            <h3 className="text-lg font-bold text-gray-800 mb-0.5">{stats.exhibitions.total}</h3>
+            <p className="text-gray-600 text-xs">Total Exhibitions</p>
           </div>
 
           {/* Campaigns Card */}
-          <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-            <div className="flex items-center justify-between mb-4">
-              <div className="p-3 bg-green-100 rounded-xl">
-                <DollarSign className="h-6 w-6 text-green-600" />
+          <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-4 shadow hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+            <div className="flex items-center justify-between mb-2">
+              <div className="p-2 bg-green-100 rounded-lg">
+                <DollarSign className="h-4 w-4 text-green-600" />
               </div>
-              <span className="text-xs font-medium text-blue-600 bg-blue-100 px-2 py-1 rounded-full">
+              <span className="text-xs font-medium text-blue-600 bg-blue-100 px-2 py-0.5 rounded-full">
                 {stats.campaigns.totalCampaigns} active
               </span>
             </div>
-            <h3 className="text-2xl font-bold text-gray-800 mb-1">${stats.campaigns.totalFundsRaised.toLocaleString()}</h3>
-            <p className="text-gray-600 text-sm">Funds Raised</p>
+            <h3 className="text-lg font-bold text-gray-800 mb-0.5">${stats.campaigns.totalFundsRaised.toLocaleString()}</h3>
+            <p className="text-gray-600 text-xs">Funds Raised</p>
           </div>
 
           {/* Advertisements Card */}
-          <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-            <div className="flex items-center justify-between mb-4">
-              <div className="p-3 bg-orange-100 rounded-xl">
-                <Megaphone className="h-6 w-6 text-orange-600" />
+          <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-4 shadow hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+            <div className="flex items-center justify-between mb-2">
+              <div className="p-2 bg-orange-100 rounded-lg">
+                <Megaphone className="h-4 w-4 text-orange-600" />
               </div>
-              <span className="text-xs font-medium text-purple-600 bg-purple-100 px-2 py-1 rounded-full">
+              <span className="text-xs font-medium text-purple-600 bg-purple-100 px-2 py-0.5 rounded-full">
                 {stats.advertisements.timeDistribution.daily > 0 ? `+${stats.advertisements.timeDistribution.daily} today` : 'No ads today'}
               </span>
             </div>
-            <h3 className="text-2xl font-bold text-gray-800 mb-1">{stats.advertisements.total}</h3>
-            <p className="text-gray-600 text-sm">Total Ads</p>
+            <h3 className="text-lg font-bold text-gray-800 mb-0.5">{stats.advertisements.total}</h3>
+            <p className="text-gray-600 text-xs">Total Ads</p>
           </div>
         </div>
 
         {/* Charts Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Time Distribution Chart */}
-          <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-2xl p-6 shadow-lg">
-            <div className="flex items-center mb-6">
-              <div className="p-2 bg-blue-100 rounded-lg mr-3">
-                <TrendingUp className="h-5 w-5 text-blue-600" />
+          <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-4 shadow">
+            <div className="flex items-center mb-4">
+              <div className="p-1.5 bg-blue-100 rounded-lg mr-2">
+                <TrendingUp className="h-4 w-4 text-blue-600" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-800">Content Distribution</h3>
+              <h3 className="text-base font-semibold text-gray-800">Content Distribution</h3>
             </div>
-            <ResponsiveContainer width="100%" height={300}>
+            <ResponsiveContainer width="100%" height={250}>
               <BarChart data={timeDistributionData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                 <XAxis dataKey="name" stroke="#6b7280" />
@@ -187,18 +187,18 @@ const OverviewSection: React.FC = () => {
           </div>
 
           {/* Notices Distribution */}
-          <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-2xl p-6 shadow-lg">
-            <div className="flex items-center justify-between mb-6">
+          <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-4 shadow">
+            <div className="flex items-center justify-between mb-4">
               <div className="flex items-center">
-                <div className="p-2 bg-green-100 rounded-lg mr-3">
-                  <Activity className="h-5 w-5 text-green-600" />
+                <div className="p-1.5 bg-green-100 rounded-lg mr-2">
+                  <Activity className="h-4 w-4 text-green-600" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-800">Notices Status</h3>
+                <h3 className="text-base font-semibold text-gray-800">Notices Status</h3>
               </div>
-              <span className="text-sm text-gray-500">{stats.notices.total} total</span>
+              <span className="text-xs text-gray-500">{stats.notices.total} total</span>
             </div>
             <div className="flex items-center justify-center">
-              <ResponsiveContainer width="100%" height={300}>
+              <ResponsiveContainer width="100%" height={250}>
                 <PieChart>
                   <Pie
                     data={noticesData}
@@ -238,27 +238,27 @@ const OverviewSection: React.FC = () => {
         </div>
 
         {/* Campaign Insights */}
-        <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-2xl p-6 shadow-lg">
-          <div className="flex items-center mb-6">
-            <div className="p-2 bg-emerald-100 rounded-lg mr-3">
-              <Users className="h-5 w-5 text-emerald-600" />
+        <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-4 shadow">
+          <div className="flex items-center mb-4">
+            <div className="p-1.5 bg-emerald-100 rounded-lg mr-2">
+              <Users className="h-4 w-4 text-emerald-600" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-800">Campaign Performance</h3>
+            <h3 className="text-base font-semibold text-gray-800">Campaign Performance</h3>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="text-center p-4 bg-gradient-to-br from-emerald-50 to-green-100 rounded-xl">
-              <h4 className="text-2xl font-bold text-emerald-700">{stats.campaigns.totalCampaigns}</h4>
-              <p className="text-emerald-600 text-sm">Active Campaigns</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="text-center p-3 bg-gradient-to-br from-emerald-50 to-green-100 rounded-lg">
+              <h4 className="text-lg font-bold text-emerald-700">{stats.campaigns.totalCampaigns}</h4>
+              <p className="text-emerald-600 text-xs">Active Campaigns</p>
             </div>
-            <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-cyan-100 rounded-xl">
-              <h4 className="text-2xl font-bold text-blue-700">${stats.campaigns.totalFundsRaised.toLocaleString()}</h4>
-              <p className="text-blue-600 text-sm">Total Raised</p>
+            <div className="text-center p-3 bg-gradient-to-br from-blue-50 to-cyan-100 rounded-lg">
+              <h4 className="text-lg font-bold text-blue-700">${stats.campaigns.totalFundsRaised.toLocaleString()}</h4>
+              <p className="text-blue-600 text-xs">Total Raised</p>
             </div>
-            <div className="text-center p-4 bg-gradient-to-br from-purple-50 to-indigo-100 rounded-xl">
-              <h4 className="text-2xl font-bold text-purple-700">
+            <div className="text-center p-3 bg-gradient-to-br from-purple-50 to-indigo-100 rounded-lg">
+              <h4 className="text-lg font-bold text-purple-700">
                 ${stats.campaigns.totalCampaigns > 0 ? Math.round(stats.campaigns.totalFundsRaised / stats.campaigns.totalCampaigns).toLocaleString() : '0'}
               </h4>
-              <p className="text-purple-600 text-sm">Avg per Campaign</p>
+              <p className="text-purple-600 text-xs">Avg per Campaign</p>
             </div>
           </div>
         </div>
