@@ -1,4 +1,6 @@
-const API_URL = "http://localhost:5000/posts";
+import { fetchWithAuth } from "@/config/fetchWithAuth";
+
+const API_URL = "/posts";
 
 type FilterState = {
   search: string;
@@ -31,11 +33,8 @@ export const getUserPosts = async (filters?: FilterState) => {
       queryParams.toString() ? `?${queryParams.toString()}` : ""
     }`;
 
-    const response = await fetch(url, {
+    const response = await fetchWithAuth(url, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
     });
     
     if (!response.ok) {
@@ -51,11 +50,8 @@ export const getUserPosts = async (filters?: FilterState) => {
 
 export const deletePost = async (postId: string) => {
   try {
-    const response = await fetch(`${API_URL}/${postId}`, {
+    const response = await fetchWithAuth(`${API_URL}/${postId}`, {
       method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
     });
 
     if (!response.ok) {

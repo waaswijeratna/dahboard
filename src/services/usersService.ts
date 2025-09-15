@@ -1,4 +1,6 @@
-// services/userService.ts
+import { fetchWithAuth } from "@/config/fetchWithAuth";
+
+const API_URL = "/users";
 
 type FilterState = {
   search: string;
@@ -10,11 +12,8 @@ type FilterState = {
 // Get user profile by ID
 export const getUserProfile = async (userId: string) => {
   try {
-    const response = await fetch(`http://localhost:5000/users/${userId}`, {
+    const response = await fetchWithAuth(`${API_URL}/${userId}`, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
     });
 
     if (!response.ok) {
@@ -50,13 +49,10 @@ export const getAllUsers = async (filters?: FilterState) => {
       }
     }
 
-    const url = `http://localhost:5000/users${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
+    const url = `${API_URL}${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
     
-    const response = await fetch(url, {
+    const response = await fetchWithAuth(url, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
     });
 
     if (!response.ok) {
@@ -74,7 +70,7 @@ export const getAllUsers = async (filters?: FilterState) => {
 // ✅ Delete user by ID
 export const deleteUserById = async (userId: string) => {
   try {
-    const response = await fetch(`http://localhost:5000/users/${userId}`, {
+    const response = await fetchWithAuth(`${API_URL}/${userId}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

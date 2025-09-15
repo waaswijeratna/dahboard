@@ -21,7 +21,8 @@
     "recharts": "^3.1.2",
     "tailwind-scrollbar-hide": "^2.0.0",
     "three": "^0.174.0",
-    "three-stdlib": "^2.35.14"
+    "three-stdlib": "^2.35.14",
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

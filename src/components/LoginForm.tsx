@@ -36,7 +36,7 @@ export default function LoginForm() {
 
     try {
       const response = await loginUser(email, password);
-      if (response.token) {
+      if (response.accessToken) {
         router.push("/");
       } else {
         setServerError(response.message || "Login failed");
@@ -47,9 +47,9 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="w-full h-[90vh] overflow-auto scrollbar-hide mt-2 flex flex-col justify-around">
+    <div className="w-full h-[90vh] overflow-auto scrollbar-hide mt-2 flex flex-col justify-around bg-white rounded-xl p-6">
       <div>
-        <h2 className="text-xl font-semibold mb-4 text-third">Login</h2>
+        <h2 className="text-xl font-semibold mb-4 text-primary">Login</h2>
         {serverError && <p className="text-red-500">{serverError}</p>}
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -57,7 +57,7 @@ export default function LoginForm() {
             <input
               type="text"
               placeholder="Email"
-              className={`w-full text-white p-2 border rounded border-secondary focus:border-third focus:outline-none ${
+              className={`w-full text-primary placeholder:text-gray-400 p-2 border rounded border-secondary focus:border-third focus:outline-none ${
                 errors.email ? "border-red-500" : ""
               }`}
               value={email}
@@ -73,7 +73,7 @@ export default function LoginForm() {
             <input
               type="password"
               placeholder="Password"
-              className={`w-full text-white p-2 border rounded border-secondary focus:border-third focus:outline-none ${
+              className={`w-full text-primary placeholder:text-gray-400 p-2 border rounded border-secondary focus:border-third focus:outline-none ${
                 errors.password ? "border-red-500" : ""
               }`}
               value={password}
@@ -93,8 +93,6 @@ export default function LoginForm() {
           </button>
         </form>
       </div>
-
-
     </div>
   );
 }

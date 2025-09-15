@@ -1,4 +1,8 @@
-const API_URL = "http://localhost:5000/exhibitions";
+import { fetchWithAuth } from "@/config/fetchWithAuth";
+
+
+const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+const API_URL = "/exhibitions";
 
 const getUserIdFromLocalStorage = () => {
   const user = localStorage.getItem("userId");
@@ -14,9 +18,8 @@ export const submitExhibitionForm = async (formData: any) => {
   const dataToSend = { ...formData, userId };
 
   try {
-    const response = await fetch(API_URL, {
+    const response = await fetchWithAuth(API_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(dataToSend),
     });
 
@@ -31,7 +34,7 @@ export const submitExhibitionForm = async (formData: any) => {
 // Get Exhibition Cards
 export const getExhibitionsWithGalleryInfo = async () => {
   try {
-    const response = await fetch(`${API_URL}/cards`);
+    const response = await fetchWithAuth(`${API_URL}/cards`);
     if (!response.ok) throw new Error("Failed to fetch exhibition cards");
 
     return await response.json();
@@ -44,7 +47,7 @@ export const getExhibitionsWithGalleryInfo = async () => {
 // Get Exhibition Details by ID
 export const getExhibitionDetailsById = async (exhibitionId: string) => {
   try {
-    const response = await fetch(
+    const response = await fetchWithAuth(
       `${API_URL}/details?exhibitionId=${exhibitionId}`
     );
     if (!response.ok) throw new Error("Failed to fetch exhibition details");
@@ -62,7 +65,7 @@ export const getExhibitionsByUserId = async () => {
     const userId = getUserIdFromLocalStorage();
     if (!userId) throw new Error("User not logged in");
 
-    const response = await fetch(`${API_URL}/user/${userId}`);
+    const response = await fetchWithAuth(`${API_URL}/user/${userId}`);
     if (!response.ok) throw new Error("Failed to fetch exhibitions by user ID");
 
     return await response.json();
@@ -76,9 +79,8 @@ export const getExhibitionsByUserId = async () => {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const updateExhibition = async (exhibitionId: string, formData: any) => {
   try {
-    const response = await fetch(`${API_URL}/${exhibitionId}`, {
+    const response = await fetchWithAuth(`${API_URL}/${exhibitionId}`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
     });
 
@@ -94,7 +96,7 @@ export const updateExhibition = async (exhibitionId: string, formData: any) => {
 // Delete Exhibition
 export const deleteExhibition = async (exhibitionId: string) => {
   try {
-    const response = await fetch(`${API_URL}/${exhibitionId}`, {
+    const response = await fetchWithAuth(`${API_URL}/${exhibitionId}`, {
       method: "DELETE",
     });
 
@@ -109,11 +111,10 @@ export const deleteExhibition = async (exhibitionId: string) => {
 
 export const confirmStripePayment = async (sessionId: string) => {
   try {
-    const response = await fetch(
-      "http://localhost:5000/stripe/confirm-payment",
+    const response = await fetchWithAuth(
+      `${BASE_URL}/stripe/confirm-payment`,
       {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ sessionId }),
       }
     );
@@ -142,7 +143,7 @@ export const getAllExhibitions = async (filters?: {
     if (filters?.order) query.append("order", filters.order);
     if (filters?.sortUser) query.append("sortUser", filters.sortUser);
 
-    const response = await fetch(`${API_URL}?${query.toString()}`);
+    const response = await fetchWithAuth(`${API_URL}?${query.toString()}`);
     if (!response.ok) throw new Error("Failed to fetch all exhibitions");
 
     return await response.json();

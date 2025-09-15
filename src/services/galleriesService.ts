@@ -1,4 +1,6 @@
-const API_URL = "http://localhost:5000/galleries";  
+import { fetchWithAuth } from "@/config/fetchWithAuth";
+
+const API_URL = "/galleries";  
 
 
 export interface Gallery {
@@ -11,11 +13,8 @@ export interface Gallery {
 
 export const fetchGalleries = async (): Promise<Gallery[]> => {
     try {
-        const response = await fetch(API_URL, {
+        const response = await fetchWithAuth(API_URL, {
             method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
         });
 
         if (!response.ok) {

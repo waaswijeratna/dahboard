@@ -1,4 +1,7 @@
-const API_URL = "http://localhost:5000/campaigns";
+import { fetchWithAuth } from "@/config/fetchWithAuth";
+
+const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+const API_URL = "/campaigns";
 
 export const createFundraisingCampaign = async (data: {
   title: string;
@@ -18,11 +21,8 @@ export const createFundraisingCampaign = async (data: {
 
     console.log("Submitting Campaign Data:", campaignData);
 
-    const response = await fetch(`${API_URL}`, {
+    const response = await fetchWithAuth(`${API_URL}`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
       body: JSON.stringify(campaignData),
     });
 
@@ -43,7 +43,7 @@ export const getUserCampaigns = async () => {
     const userId = localStorage.getItem("userId");
     if (!userId) throw new Error("No userId found in localStorage");
 
-    const response = await fetch(`${API_URL}/user/${userId}`);
+    const response = await fetchWithAuth(`${API_URL}/user/${userId}`);
     if (!response.ok) throw new Error("Failed to fetch user campaigns");
 
     return await response.json();
@@ -68,7 +68,7 @@ export const getAllCampaigns = async (filters?: {
     if (filters?.order) query.append("order", filters.order);
     if (filters?.sortUser) query.append("sortUser", filters.sortUser);
     
-    const response = await fetch(`${API_URL}?${query.toString()}`); 
+    const response = await fetchWithAuth(`${API_URL}?${query.toString()}`); 
 
     if (!response.ok) throw new Error("Failed to fetch campaigns");
 
@@ -85,7 +85,7 @@ export const deleteCampaign = async (campaignId: string) => {
     const userId = localStorage.getItem("userId");
     if (!userId) throw new Error("User ID not found");
 
-    const response = await fetch(`${API_URL}/${campaignId}?userId=${userId}`, {
+    const response = await fetchWithAuth(`${API_URL}/${campaignId}?userId=${userId}`, {
       method: "DELETE",
     });
 
@@ -106,7 +106,7 @@ export const createStripeCheckoutSession = async ({
   campaignId: string;
 }) => {
   try {
-    const response = await fetch("http://localhost:5000/stripe/checkout", {
+    const response = await fetchWithAuth(`${BASE_URL}/stripe/checkout`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

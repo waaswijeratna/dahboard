@@ -1,4 +1,7 @@
-const API_URL = "http://localhost:5000/advertisements";
+import { fetchWithAuth } from "@/config/fetchWithAuth";
+
+
+const API_URL = "/advertisements";
 
 export const createAd = async (data: { 
   name: string; 
@@ -19,11 +22,8 @@ export const createAd = async (data: {
 
     const adData = { ...data, userId };
 
-    const response = await fetch(`${API_URL}`, {
+    const response = await fetchWithAuth(`${API_URL}`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
       body: JSON.stringify(adData),
     });
 
@@ -46,11 +46,8 @@ export const getUserAds = async () => {
       return null;
     }
 
-    const response = await fetch(`${API_URL}/user/${userId}`, {
+    const response = await fetchWithAuth(`${API_URL}/user/${userId}`, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
     });
 
     if (!response.ok) {
@@ -81,11 +78,8 @@ export const getAllAds = async (filters?: {
     if (filters?.sortUser?.trim()) query.append("sortUser", filters.sortUser.trim());
     
     const url = query.toString() ? `${API_URL}?${query.toString()}` : API_URL;
-    const response = await fetch(url, {
+    const response = await fetchWithAuth(url, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
     });
 
     if (!response.ok) {
@@ -119,11 +113,8 @@ export const updateAd = async (data: {
     const { id, ...rest } = data;
     const adData = { ...rest, userId };
 
-    const response = await fetch(`${API_URL}/${id}`, {
+    const response = await fetchWithAuth(`${API_URL}/${id}`, {
       method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
       body: JSON.stringify(adData),
     });
 
@@ -140,11 +131,8 @@ export const updateAd = async (data: {
 
 export const deleteAd = async (id: string) => {
   try {
-    const response = await fetch(`${API_URL}/${id}`, {
+    const response = await fetchWithAuth(`${API_URL}/${id}`, {
       method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
     });
 
     if (!response.ok) {

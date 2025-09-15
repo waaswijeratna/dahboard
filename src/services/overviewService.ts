@@ -1,4 +1,4 @@
-// services/overviewService.ts
+import { fetchWithAuth } from "@/config/fetchWithAuth";
 
 export interface OverviewStats {
   posts: {
@@ -32,12 +32,12 @@ export interface OverviewStats {
   };
 }
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'; // Fallback to localhost if env variable is not set
+const API_URL = "/overview"; 
 
 // Fetch overview stats
 export const getOverviewStats = async (): Promise<OverviewStats> => {
   try {
-    const res = await fetch(`${API_URL}/overview/statistics`);
+    const res = await fetchWithAuth(`${API_URL}/statistics`);
     if (!res.ok) throw new Error("Failed to fetch overview stats");
     const data: OverviewStats = await res.json();
     return data;

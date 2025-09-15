@@ -1,4 +1,9 @@
+import { useAuthStore } from "@/store/authStore";
+import { fetchWithAuth } from "@/config/fetchWithAuth";
+
+
 const API_BASE_URL = "http://localhost:5000/moderators";
+const API_URL = "/moderators";
 
 interface UpdateUserData {
   id: string;
@@ -36,6 +41,14 @@ const saveUserDataToLocalStorage = (user: {
   role: string;
 }) => {
   localStorage.setItem("userData", JSON.stringify(user));
+};
+
+const saveRefreshToken = (refreshToken: string) => {
+  localStorage.setItem("refreshToken", refreshToken);
+};
+
+export const saveAccessToken = (token: string) => {
+  localStorage.setItem("accessToken", token);
 };
 
 // Function to load user data from local storage
@@ -121,9 +134,18 @@ export const registerUser = async (
   });
 
   const data = await res.json();
-  console.log("came data", data);
 
-  // ✅ Just return response, no localStorage or global state updates
+  const { accessToken, refreshToken } = data;
+
+  console.log("came data", data);
+  saveRefreshToken(refreshToken);
+
+  const decodedUser = decodeToken(accessToken);
+
+  if (decodedUser) {
+    useAuthStore.getState().setAuth(accessToken, decodedUser);
+  }
+
   return data;
 };
 
@@ -137,14 +159,53 @@ export const loginUser = async (email: string, password: string) => {
   const data = await res.json();
   console.log("came data", data);
   if (res.ok) {
-    const decodedData = decodeToken(data.token);
-    if (decodedData) {
-      saveUserIdToLocalStorage(decodedData.id);
-      saveUserDataToLocalStorage(decodedData);
-      userData = decodedData;
+    const { accessToken, refreshToken } = data;
+
+    saveRefreshToken(refreshToken);
+
+    const decodedUser = decodeToken(accessToken);
+    if (decodedUser) {
+      useAuthStore.getState().setAuth(accessToken, decodedUser);
+      saveUserIdToLocalStorage(decodedUser.id);
+      saveUserDataToLocalStorage(decodedUser);
+      userData = decodedUser;
     }
   }
   return data;
+};
+
+export const refreshAccessToken = async () => {
+  const refreshToken = localStorage.getItem("refreshToken");
+  if (!refreshToken) return { success: false, message: "No refresh token" };
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/refresh`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ refreshToken }),
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      const { accessToken } = data;
+      const decodedUser = decodeToken(accessToken);
+
+      if (decodedUser) {
+        useAuthStore.getState().setAuth(accessToken, decodedUser);
+        return { success: true, accessToken };
+      }
+    } else {
+      // Backend sends descriptive error messages
+      return {
+        success: false,
+        message: data.message || "Failed to refresh token",
+      };
+    }
+  } catch (error) {
+    console.error("Refresh token error:", error);
+    return { success: false, message: "Network error while refreshing token" };
+  }
 };
 
 export const getProfile = () => {
@@ -177,11 +238,11 @@ export const getAllModerators = async (filters?: FilterState) => {
       }
     }
 
-    const url = `${API_BASE_URL}${
+    const url = `${API_URL}${
       queryParams.toString() ? `?${queryParams.toString()}` : ""
     }`;
 
-    const response = await fetch(url);
+    const response = await fetchWithAuth(url);
     if (!response.ok) throw new Error("Failed to fetch moderators");
 
     const data = await response.json();
@@ -194,7 +255,7 @@ export const getAllModerators = async (filters?: FilterState) => {
 
 export const deleteModerator = async (id: string) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/${id}`, {
+    const response = await fetchWithAuth(`${API_URL}/${id}`, {
       method: "DELETE",
     });
 
@@ -210,9 +271,8 @@ export const updateUser = async (updatedUserData: UpdateUserData) => {
   try {
     const { id, ...updateData } = updatedUserData;
 
-    const res = await fetch(`${API_BASE_URL}/${id}`, {
+    const res = await fetchWithAuth(`${API_URL}/${id}`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updateData),
     });
 
@@ -222,14 +282,21 @@ export const updateUser = async (updatedUserData: UpdateUserData) => {
       let updatedUser = null;
 
       // Check if the backend returns a new token
-      if (data.token) {
-        localStorage.setItem("token", data.token);
-        const decodedData = decodeToken(data.token);
+      if (data.moderator.token) {
+        localStorage.setItem("token", data.moderator.token);
+        const decodedData = decodeToken(data.moderator.token);
         if (decodedData) {
+          useAuthStore.getState().setAuth(data.moderator.token, decodedData);
           saveUserIdToLocalStorage(decodedData.id);
           saveUserDataToLocalStorage(decodedData);
           userData = decodedData;
           updatedUser = decodedData;
+        }
+
+        //  update Zustand user with existing token
+        const currentToken = useAuthStore.getState().accessToken;
+        if (currentToken) {
+          useAuthStore.getState().setAuth(currentToken, updatedUser);
         }
       }
 
