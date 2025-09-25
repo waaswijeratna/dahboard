@@ -14,9 +14,11 @@ export default function SignupForm({ onSwitch }: Props) {
   const [email, setEmail] = useState("");
   const [age, setAge] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState("user");
   const [pfpUrl, setPfpUrl] = useState<string>("");
   const [errors, setErrors] = useState<{ name?: string; email?: string; password?: string }>({});
   const [serverError, setServerError] = useState("");
+
 
   const validateEmail = (email: string) => {
     return /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email);
@@ -45,7 +47,7 @@ export default function SignupForm({ onSwitch }: Props) {
     if (Object.keys(validationErrors).length > 0) return;
 
     try {
-      const response = await registerUser(name, email, Number(age), password, pfpUrl);
+      const response = await registerUser(name, email, Number(age), password, role, pfpUrl);
       if (response.token) {
         router.push("/");
       } else {
@@ -66,9 +68,8 @@ export default function SignupForm({ onSwitch }: Props) {
           <input
             type="text"
             placeholder="Name"
-            className={`w-full text-white p-2 border rounded border-secondary focus:border-third focus:outline-none ${
-              errors.name ? "border-red-500" : ""
-            }`}
+            className={`w-full text-white p-2 border rounded border-secondary focus:border-third focus:outline-none ${errors.name ? "border-red-500" : ""
+              }`}
             value={name}
             onChange={(e) => {
               setName(e.target.value);
@@ -82,9 +83,8 @@ export default function SignupForm({ onSwitch }: Props) {
           <input
             type="text"
             placeholder="Email"
-            className={`w-full text-white p-2 border rounded border-secondary focus:border-third focus:outline-none ${
-              errors.email ? "border-red-500" : ""
-            }`}
+            className={`w-full text-white p-2 border rounded border-secondary focus:border-third focus:outline-none ${errors.email ? "border-red-500" : ""
+              }`}
             value={email}
             onChange={(e) => {
               setEmail(e.target.value);
@@ -109,9 +109,8 @@ export default function SignupForm({ onSwitch }: Props) {
           <input
             type="password"
             placeholder="Password"
-            className={`w-full text-white p-2 border rounded border-secondary focus:border-third focus:outline-none ${
-              errors.password ? "border-red-500" : ""
-            }`}
+            className={`w-full text-white p-2 border rounded border-secondary focus:border-third focus:outline-none ${errors.password ? "border-red-500" : ""
+              }`}
             value={password}
             onChange={(e) => {
               setPassword(e.target.value);
@@ -120,6 +119,17 @@ export default function SignupForm({ onSwitch }: Props) {
           />
           {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
         </div>
+
+        <select
+          value={role}
+          onChange={(e) => setRole(e.target.value)}
+          className="w-full text-white p-2 border rounded border-secondary focus:border-third focus:outline-none"
+        >
+          <option value="user">User</option>
+          <option value="artist">Artist</option>
+          <option value="admin">Admin</option>
+        </select>
+
 
         <button
           type="submit"
