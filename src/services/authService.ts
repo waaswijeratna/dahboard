@@ -1,8 +1,8 @@
 import { useAuthStore } from "@/store/authStore";
 import { fetchWithAuth } from "@/config/fetchWithAuth";
 
-
-const API_BASE_URL = "http://localhost:5000/moderators";
+const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+const API_BASE_URL = `${BASE_URL}/moderators`;
 const API_URL = "/moderators";
 
 interface UpdateUserData {
